@@ -15,16 +15,16 @@ args=sys.argv[1:]
 root=Path(os.environ['TEST_STATE'])
 mode=os.environ.get('TEST_MODE','ok')
 with (root/'calls').open('a') as f:f.write(name+' '+' '.join(args)+'\\n')
-if name=='id':
- print('1000' if mode=='not-root' else '0')
-elif name=='git':
+if name=='git':
  if args[:1]==['symbolic-ref']:print('server')
  elif args[:1]==['status']:print(' M README.md' if mode=='dirty' else '',end='')
  elif args[:1]==['rev-parse']:print('new-commit' if (root/'merged').exists() else 'old-commit')
  elif args[:1]==['merge-base'] and mode=='diverged':sys.exit(1)
  elif args[:1]==['merge']:(root/'merged').touch()
 elif name=='docker':
- if args==['compose','ps','-q','health']:
+ if args==['info'] and mode=='docker-access':sys.exit(1)
+ elif args==['compose','version'] and mode=='compose-missing':sys.exit(1)
+ elif args==['compose','ps','-q','health']:
   if mode not in ('initial','initial-health'):print('old-container')
  elif args[:1]==['inspect']:print('sha256:old-image')
  elif args[:2]==['compose','build'] and mode=='build':sys.exit(1)
@@ -52,7 +52,7 @@ class UpdateTests(unittest.TestCase):
         shutil.copy(ROOT/'update.sh', app/'update.sh')
         binaries = base/'bin'
         binaries.mkdir()
-        for name in ('git','docker','id'):
+        for name in ('git','docker'):
             script = binaries/name
             script.write_text(DISPATCH)
             script.chmod(0o755)
@@ -112,11 +112,25 @@ class UpdateTests(unittest.TestCase):
         self.assertEqual(calls.count('docker compose up'), 1)
         self.assertNotIn('flesh-server:rollback', calls)
 
-    def test_non_root_does_not_modify_installation(self):
-        result, calls, _ = self.run_update('not-root')
+    def test_missing_docker_access_stops_before_fetch(self):
+        result, calls, _ = self.run_update('docker-access')
         self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Docker is not accessible', result.stderr)
         self.assertNotIn('git fetch', calls)
-        self.assertNotIn('docker', calls)
+        self.assertNotIn('compose build', calls)
+        self.assertNotIn('compose up', calls)
+
+    def test_missing_compose_has_clear_error_before_fetch(self):
+        result, calls, _ = self.run_update('compose-missing')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Docker Compose is unavailable', result.stderr)
+        self.assertNotIn('git fetch', calls)
+
+    def test_user_checkout_updates_from_another_working_directory(self):
+        result, calls, _ = self.run_update('ok')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('compose up', calls)
+        self.assertNotIn('sudo', calls)
 
 
 if __name__ == '__main__':

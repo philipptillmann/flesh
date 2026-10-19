@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# Update a root-owned checkout of the server branch; preserve configuration/data.
+# Update a user-owned checkout of the server branch; preserve configuration/data.
 set -Eeuo pipefail
 umask 077
 
 fail() { printf 'Flesh: %s\n' "$*" >&2; exit 1; }
 main() {
-[[ $(id -u) -eq 0 ]] || fail 'Run as root.'
 for command in git docker flock; do
     command -v "$command" >/dev/null || fail "Missing dependency: $command"
 done
@@ -17,8 +16,8 @@ flock -n 9 || fail 'Another update is already running.'
 [[ $(git symbolic-ref --quiet --short HEAD) == server ]] || fail 'Check out branch server first.'
 [[ -z $(git status --porcelain) ]] || fail 'Working tree contains changes. Commit or move them before updating.'
 [[ -f .env ]] || fail 'Create .env from .env.example and configure APP_ORIGIN first.'
-docker compose version >/dev/null
-docker info >/dev/null
+docker compose version >/dev/null 2>&1 || fail 'Docker Compose is unavailable. Install the Docker Compose plugin first.'
+docker info >/dev/null 2>&1 || fail 'Docker is not accessible. Check that the daemon is running and your user has Docker access, then retry.'
 before=$(git rev-parse HEAD)
 printf 'Fetching branch server …\n'
 git fetch --prune origin server

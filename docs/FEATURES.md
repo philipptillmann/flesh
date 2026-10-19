@@ -12,8 +12,9 @@ Alle ursprünglichen Anforderungen werden einzeln in GitHub Issues verfolgt. Imp
 | #6 | Zyklus und Menstruationsbeschwerden protokollieren | Implementiert |
 | #7 | Docker-App und responsive PWA bereitstellen | Implementiert |
 | #8 | App in Flesh umbenennen | Implementiert |
-| #9 | Installation unter /flesh, Port 8083 und Root-Update-Skript | Implementiert |
+| #9 | Installation unter ~/flesh, Port 8083 und Update-Skript | Implementiert |
 | #10 | Neutrale Dokumentation und Feature-Issue-Workflow | Implementiert |
 | #11 | Logo-Richtung für Flesh auswählen und umsetzen | Offen |
+| #12 | Updates im Home-Verzeichnis ohne Root-Pflicht | Implementiert |
 
 Die Detailkriterien und Prüfungen stehen in den jeweiligen Issues und in `.github/features.json`. Neue Feature-Anfragen erhalten ebenfalls ein eigenes Issue.

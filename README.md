@@ -14,12 +14,12 @@ Flesh ist eine selbst gehostete Docker-App mit responsiver PWA für Desktop und 
 
 ## Installation und Updates
 
-Die vollständige Anleitung für GitHub, Installation unter `/flesh`, Port `8083`, HTTPS, Handy-Zugriff und `/flesh/update.sh` steht in [docs/INSTALL.md](docs/INSTALL.md). Für jedes Feature wird ein Issue geführt; siehe [Feature-Stand](docs/FEATURES.md) und [CONTRIBUTING.md](CONTRIBUTING.md).
+Die vollständige Anleitung für GitHub, Installation unter `~/flesh`, Port `8083`, HTTPS, Handy-Zugriff und `~/flesh/update.sh` steht in [docs/INSTALL.md](docs/INSTALL.md). Für jedes Feature wird ein Issue geführt; siehe [Feature-Stand](docs/FEATURES.md) und [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Lokal starten
 
 ```sh
-cd /flesh
+cd ~/flesh
 docker compose up --build -d
 ```
 

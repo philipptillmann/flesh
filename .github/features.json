@@ -102,16 +102,16 @@
   },
   {
     "id": "deployment-update",
-    "title": "Installation unter /flesh, Port 8083 und Root-Update-Skript",
+    "title": "Installation im Home-Verzeichnis, Port 8083 und Update-Skript",
     "description": "Einen dokumentierten GitHub-Installations- und Updateablauf bereitstellen.",
     "criteria": [
-      "Branch server und Installation unter /flesh dokumentieren",
+      "Branch server und Installation unter ~/flesh dokumentieren",
       "Lokalen App-Port 8083 konfigurieren und HTTPS-Handyzugriff erklären",
-      "/flesh/update.sh von beliebigem Arbeitsverzeichnis aus aufrufbar machen",
+      "~/flesh/update.sh von beliebigem Arbeitsverzeichnis aus aufrufbar machen",
       "Saubere Fast-Forward-Updates, konsistente Backups und Healthchecks implementieren",
       "Vorheriges Image bei fehlgeschlagenem Start wiederherstellen"
     ],
-    "verification": "Tests für SQLite-WAL-Sicherung, Erstinstallation, Root-Prüfung, schmutzige/divergierte Checkouts, Build-/Backupfehler und Image-Rollback. Docker- und Compose-Prüfung. Keine Installation auf einem konkreten Zielhost enthalten.",
+    "verification": "Tests für SQLite-WAL-Sicherung, Erstinstallation, Docker-Zugriffsprüfung, schmutzige/divergierte Checkouts, Build-/Backupfehler und Image-Rollback. Docker- und Compose-Prüfung. Keine Installation auf einem konkreten Zielhost enthalten.",
     "implemented": true
   },
   {
@@ -138,5 +138,18 @@
     ],
     "verification": "Vorschläge in docs/LOGO.md. Es wurde noch keine neue Logo-Richtung ausgewählt oder umgesetzt.",
     "implemented": false
+  },
+  {
+    "id": "home-updates",
+    "title": "Updates im Home-Verzeichnis ohne Root-Pflicht ermöglichen",
+    "description": "Installation und Updates als normaler Benutzer über ~/flesh/update.sh.",
+    "criteria": [
+      "Root-Pflicht entfernen",
+      "Docker-Zugriff vor Änderungen prüfen",
+      "Home-Installation und einmaliges Aktualisieren des alten Skripts dokumentieren",
+      "Backup- und Rollback-Verhalten beibehalten"
+    ],
+    "verification": "Betriebstests für fremdes Arbeitsverzeichnis, fehlenden Docker-Zugriff, Compose, Backups und Rollback.",
+    "implemented": true
   }
 ]
