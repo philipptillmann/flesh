@@ -1,0 +1,10 @@
+data
+.env
+.git
+tests
+__pycache__
+
+backups
+.update.lock
+*.sqlite3
+*.sqlite3-*

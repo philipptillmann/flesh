@@ -1,0 +1,142 @@
+[
+  {
+    "id": "encrypted-accounts",
+    "title": "Accounts und clientseitig verschlüsselter Datentresor",
+    "description": "Gesundheitsdaten werden nur im angemeldeten, entsperrten Browser lesbar; die Ablage enthält verschlüsselte Inhalte.",
+    "criteria": [
+      "Benutzerkonten und isolierte Sitzungen bereitstellen",
+      "Gesundheitsdaten vor dem Upload mit AES-GCM verschlüsseln",
+      "Weder Passwort noch Entschlüsselungsschlüssel übertragen",
+      "Vertrauensgrenzen, Schlüsselverlust und sichtbare Metadaten dokumentieren"
+    ],
+    "verification": "Integrationstests prüfen erneute Entschlüsselung, falsche Schlüssel, Manipulation, Nutzertrennung, Cookie- und Origin-Schutz. Keine technische Bindung an ein einzelnes Telefon; siehe README.",
+    "implemented": true
+  },
+  {
+    "id": "pain",
+    "title": "Leiden und zugeordnetes Schmerzprotokoll",
+    "description": "Schmerzen immer einem zuvor eingetragenen Leiden zuordnen.",
+    "criteria": [
+      "Leiden anlegen",
+      "Datum, Stärke, Körperstelle und Notizen protokollieren",
+      "Verlauf darstellen und Einträge löschen"
+    ],
+    "verification": "Chromium-Bedientest für Leidensanlage, Schmerzprotokoll und erneutes Laden. Synthetische Testdaten, keine persönlichen Gesundheitsdaten.",
+    "implemented": true
+  },
+  {
+    "id": "medication",
+    "title": "Medikamentenpläne und Einnahmeprotokoll",
+    "description": "Tägliche Einnahmepläne und bestätigte Einnahmen verwalten.",
+    "criteria": [
+      "Medikament, Dosierung, Start-/Enddatum und tägliche Uhrzeiten erfassen",
+      "Fällige Tagesdosen darstellen",
+      "Einnahmen bestätigen und Verlauf speichern"
+    ],
+    "verification": "Chromium-Bedientest für Plan und Einnahmebestätigung. Andere Wiederholungsintervalle und Bearbeiten bestehender Pläne sind noch nicht enthalten.",
+    "implemented": true
+  },
+  {
+    "id": "foreground-reminders",
+    "title": "Erinnerungen bei geöffneter und entsperrter App",
+    "description": "Während einer laufenden Sitzung auf fällige Einnahmen hinweisen.",
+    "criteria": [
+      "Tägliche Termine lokal im entsperrten Browser prüfen",
+      "Generischen Hinweis ohne Medikamentennamen anzeigen",
+      "Browser-Benachrichtigungen nach ausdrücklicher Erlaubnis anbieten",
+      "Grenzen pausierter oder geschlossener Apps dokumentieren"
+    ],
+    "verification": "Quellprüfung der lokalen Terminprüfung und dokumentierter Browserberechtigungen. Betriebssysteme können Hintergrund-Timer pausieren; geschlossene Apps werden separat verfolgt.",
+    "implemented": true
+  },
+  {
+    "id": "background-push",
+    "title": "Zuverlässige Web-Push-Erinnerungen bei geschlossener PWA",
+    "description": "Medikamentenerinnerungen auch bei geschlossener App auf unterstützten Mobilgeräten ermöglichen.",
+    "criteria": [
+      "Datensparsamen Push-Ansatz mit verschlüsselten Gesundheitsdaten entwerfen",
+      "Push-Abonnement und generische Zustellung implementieren",
+      "Berechtigungs- und Fehlerfälle behandeln",
+      "Auf einer installierten iPhone-PWA prüfen"
+    ],
+    "verification": "Noch nicht implementiert. Bestehende Browser-Timer erfüllen diesen Request nicht; siehe README.",
+    "implemented": false
+  },
+  {
+    "id": "cycle",
+    "title": "Zyklus und Menstruationsbeschwerden protokollieren",
+    "description": "Blutungen, Periodenbeginn und Beschwerden über die Zeit erfassen.",
+    "criteria": [
+      "Blutungsstärke und Periodenbeginn erfassen",
+      "Beschwerden und Stärke dokumentieren",
+      "Zyklustage und bisherige Zykluslängen darstellen",
+      "Keine Verhütungseignung oder Fruchtbarkeitsvorhersage suggerieren"
+    ],
+    "verification": "Chromium-Bedientest für Blutung, Beschwerden und Periodenbeginn; keine medizinische Prognosefunktion.",
+    "implemented": true
+  },
+  {
+    "id": "docker-pwa",
+    "title": "Docker-App und responsive PWA bereitstellen",
+    "description": "Flesh auf einem eigenen Host betreiben und per Desktop- oder Mobilbrowser verwenden.",
+    "criteria": [
+      "Persistentes Docker-Datenvolume und nicht privilegierten Container verwenden",
+      "PWA-Manifest und öffentliche App-Hülle bereitstellen",
+      "Mobile und Desktop-Oberfläche anbieten",
+      "Automatische Sperre ohne Klartext in Web Storage implementieren"
+    ],
+    "verification": "Docker-Build und Container-Healthcheck sowie Chromium-Bedientest auf Desktop- und Mobilbreite. Echter Safari-/iPhone-Test steht aus.",
+    "implemented": true
+  },
+  {
+    "id": "name",
+    "title": "App in Flesh umbenennen",
+    "description": "Den Namen Flesh konsistent in der Anwendung verwenden.",
+    "criteria": [
+      "Browser-Titel und sichtbare Marke umstellen",
+      "PWA-Name und Benachrichtigungen umstellen",
+      "Dokumentation aktualisieren"
+    ],
+    "verification": "JavaScript-Syntax und Manifest geprüft. Das Herz-Icon bleibt bis zur Logo-Auswahl ein Platzhalter.",
+    "implemented": true
+  },
+  {
+    "id": "deployment-update",
+    "title": "Installation unter /flesh, Port 8083 und Root-Update-Skript",
+    "description": "Einen dokumentierten GitHub-Installations- und Updateablauf bereitstellen.",
+    "criteria": [
+      "Branch server und Installation unter /flesh dokumentieren",
+      "Lokalen App-Port 8083 konfigurieren und HTTPS-Handyzugriff erklären",
+      "/flesh/update.sh von beliebigem Arbeitsverzeichnis aus aufrufbar machen",
+      "Saubere Fast-Forward-Updates, konsistente Backups und Healthchecks implementieren",
+      "Vorheriges Image bei fehlgeschlagenem Start wiederherstellen"
+    ],
+    "verification": "Tests für SQLite-WAL-Sicherung, Erstinstallation, Root-Prüfung, schmutzige/divergierte Checkouts, Build-/Backupfehler und Image-Rollback. Docker- und Compose-Prüfung. Keine Installation auf einem konkreten Zielhost enthalten.",
+    "implemented": true
+  },
+  {
+    "id": "privacy-workflow",
+    "title": "Neutrale Dokumentation und Feature-Issue-Workflow",
+    "description": "Repository-Inhalte ohne persönliche Angaben und ohne konkrete private Infrastrukturdetails führen.",
+    "criteria": [
+      "Nur neutrale Platzhalter in Beispielen verwenden",
+      "Lokale .env, Daten und Backups ausschließen",
+      "Feature-Vorlage und Entwicklungsregeln dokumentieren",
+      "Vorhandene Features und offene Anforderungen als Issues erfassen"
+    ],
+    "verification": "Quelltext- und Dokumentationsprüfung; generische Commit-Zuordnung. GitHub-Kontozuordnung selbst bleibt auf der Plattform sichtbar.",
+    "implemented": true
+  },
+  {
+    "id": "logo",
+    "title": "Logo-Richtung für Flesh auswählen und umsetzen",
+    "description": "Eine abstrahierte Anspielung auf Fleisch oder Körpergewebe als wiedererkennbares App-Logo gestalten.",
+    "criteria": [
+      "Zwischen Muskelfaser, Marmorierung und Körperhülle wählen",
+      "SVG und PWA-Icons gestalten",
+      "Lesbarkeit in kleinen Größen und auf Mobilgeräten prüfen"
+    ],
+    "verification": "Vorschläge in docs/LOGO.md. Es wurde noch keine neue Logo-Richtung ausgewählt oder umgesetzt.",
+    "implemented": false
+  }
+]
