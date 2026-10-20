@@ -4,6 +4,8 @@
 
 ### Implementiert
 
+- #11: Muskelfaser-Logo in App, Browser und PWA; Apple-Touch-Icon und maskierbares Home-Screen-Icon sowie Bordeaux-, Korall- und Cremefarben für Buttons, Navigation und Formulare.
+
 - #12: Installation und Aufruf über `~/flesh/update.sh` ohne Root-Pflicht; verständliche Vorabprüfung des Docker-Zugriffs und aktualisierte Anleitung.
 
 - Flesh als App-Name in Oberfläche, PWA und Benachrichtigungen.
@@ -21,7 +23,6 @@
 ### Offen
 
 - Web-Push bei geschlossener PWA.
-- Endgültiges Logo und gegebenenfalls angepasste Farbgestaltung.
 - Passwortwechsel und Wiederherstellungsschlüssel.
 - Verschlüsselter Importdialog, Bearbeiten bestehender Einträge und zusätzliche Medikamentenintervalle.
 - Test auf einem echten iPhone und unabhängiger Sicherheitsreview.

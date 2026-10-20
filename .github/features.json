@@ -129,15 +129,18 @@
   },
   {
     "id": "logo",
-    "title": "Logo-Richtung für Flesh auswählen und umsetzen",
-    "description": "Eine abstrahierte Anspielung auf Fleisch oder Körpergewebe als wiedererkennbares App-Logo gestalten.",
+    "title": "Muskelfaser-Logo, PWA-Icons und Bordeaux-Farbschema",
+    "description": "Die ausgewählte organische Muskelfaser-Marke in App, Home-Screen-Icons und Farbschema einsetzen.",
     "criteria": [
-      "Zwischen Muskelfaser, Marmorierung und Körperhülle wählen",
-      "SVG und PWA-Icons gestalten",
-      "Lesbarkeit in kleinen Größen und auf Mobilgeräten prüfen"
+      "Muskelfaser-Richtung auswählen",
+      "App-Logo und Browsericon ersetzen",
+      "Apple-Touch-Icon und maskierbare PWA-Icons integrieren",
+      "Buttons, Navigation, Eingaben und Karten an die Bordeaux-Korall-Creme-Palette anpassen",
+      "HTTP-Auslieferung und echte Icon-Abmessungen prüfen",
+      "Desktop- und Mobilansicht prüfen und Brand-Dokumentation ergänzen"
     ],
-    "verification": "Vorschläge in docs/LOGO.md. Es wurde noch keine neue Logo-Richtung ausgewählt oder umgesetzt.",
-    "implemented": false
+    "verification": "PNG-Produktionsexporte; Integrationstests für öffentliche Icons und Dimensionen; Chromium-Bedientest auf Desktop und Mobilbreite. Echter iPhone-/Safari-Test steht aus.",
+    "implemented": true
   },
   {
     "id": "home-updates",

@@ -109,7 +109,7 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.reply(200, {'vault': json.loads(user['vault']), 'revision': user['revision'], 'keySalt': user['key_salt']})
         if path.startswith('/api/'):
             return self.reply(404, {'error': 'Nicht gefunden.'})
-        if path not in ('/', '/index.html', '/app.js', '/crypto.js', '/style.css', '/sw.js', '/manifest.webmanifest', '/icon.svg'):
+        if path not in ('/', '/index.html', '/app.js', '/crypto.js', '/style.css', '/sw.js', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png', '/favicon.png'):
             return self.reply(404, {'error': 'Nicht gefunden.'})
         super().do_GET()
 

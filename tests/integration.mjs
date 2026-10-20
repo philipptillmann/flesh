@@ -59,3 +59,21 @@ test('session cookie and headers protect account data',async()=>{
  assert.match(response.headers.get('set-cookie'),/HttpOnly/);assert.match(response.headers.get('set-cookie'),/SameSite=Strict/);
  assert.match(response.headers.get('content-security-policy'),/script-src 'self'/);assert.equal(response.headers.get('cache-control'),'no-store');
 });
+test('PWA and Apple touch icons are publicly served with their declared PNG dimensions',async()=>{
+ const response=await fetch(origin+'/manifest.webmanifest');
+ assert.equal(response.status,200);
+ const manifest=await response.json();
+ assert.ok(manifest.icons.some(icon=>icon.purpose==='maskable'));
+ assert.ok(manifest.icons.some(icon=>icon.sizes==='192x192'));
+ assert.ok(manifest.icons.some(icon=>icon.sizes==='512x512'));
+ for(const icon of [...manifest.icons,{src:'/apple-touch-icon.png?v=muscle-1',sizes:'180x180'},{src:'/favicon.png?v=muscle-1',sizes:'64x64'}]){
+  const res=await fetch(origin+icon.src);
+  assert.equal(res.status,200,icon.src);
+  assert.match(res.headers.get('content-type'),/image\/png/);
+  const bytes=Buffer.from(await res.arrayBuffer());
+  assert.equal(bytes.subarray(1,4).toString(),'PNG');
+  assert.equal(`${bytes.readUInt32BE(16)}x${bytes.readUInt32BE(20)}`,icon.sizes);
+ }
+ const html=await (await fetch(origin+'/')).text();
+ assert.match(html,/rel="apple-touch-icon"/);
+});

@@ -2,6 +2,8 @@
 
 Flesh ist eine selbst gehostete Docker-App mit responsiver PWA für Desktop und Handy. Keine externen Skripte, Schriftarten, Analytics oder Laufzeit-Abhängigkeiten. Backend: Python 3.12 und SQLite; Frontend: JavaScript und Web Crypto.
 
+Die visuelle Identität verwendet ein organisches Muskelfaser-Logo in Bordeaux, Koralle und Creme; siehe [Logo und PWA-Icons](docs/LOGO.md).
+
 ## Enthalten
 
 - Mehrere Benutzerkonten mit separaten verschlüsselten Datentresoren.
