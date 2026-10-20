@@ -4,6 +4,8 @@
 
 ### Implementiert
 
+- #13: `.env`-Einstellungen für Bind-Adresse und Port sowie gesperrte Zusatzregistrierungen mit einmaliger Erstkontoanlage; bestehende Accounts und Daten bleiben erhalten.
+
 - #11: Muskelfaser-Logo in App, Browser und PWA; Apple-Touch-Icon und maskierbares Home-Screen-Icon sowie Bordeaux-, Korall- und Cremefarben für Buttons, Navigation und Formulare.
 
 - #12: Installation und Aufruf über `~/flesh/update.sh` ohne Root-Pflicht; verständliche Vorabprüfung des Docker-Zugriffs und aktualisierte Anleitung.

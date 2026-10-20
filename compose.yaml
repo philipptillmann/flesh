@@ -5,9 +5,13 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8083:8080"
+      - target: 8080
+        published: "${FLESH_PORT:-8083}"
+        host_ip: "${FLESH_BIND:-127.0.0.1}"
+        protocol: tcp
     environment:
-      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:8083}
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:${FLESH_PORT:-8083}}
+      FLESH_ALLOW_REGISTRATION: "${FLESH_ALLOW_REGISTRATION:-false}"
     volumes:
       - health-data:/app/data
     read_only: true

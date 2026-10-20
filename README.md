@@ -18,6 +18,17 @@ Die visuelle Identität verwendet ein organisches Muskelfaser-Logo in Bordeaux, 
 
 Die vollständige Anleitung für GitHub, Installation unter `~/flesh`, Port `8083`, HTTPS, Handy-Zugriff und `~/flesh/update.sh` steht in [docs/INSTALL.md](docs/INSTALL.md). Für jedes Feature wird ein Issue geführt; siehe [Feature-Stand](docs/FEATURES.md) und [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Konfiguration per .env
+
+```dotenv
+FLESH_BIND=127.0.0.1
+FLESH_PORT=8083
+FLESH_ALLOW_REGISTRATION=false
+APP_ORIGIN=https://flesh.example.org
+```
+
+Bind-Adresse und Host-Port sind damit ohne Compose-Änderungen einstellbar. Der erste Account kann auch bei gesperrter Registrierung erstellt werden; weitere Accounts erfordern `true`. Vorhandene `.env` beibehalten und nur ergänzen. Änderungen mit `~/flesh/update.sh` übernehmen; HTTPS bleibt für den mobilen Zugriff erforderlich. Details: [Installation und Konfiguration](docs/INSTALL.md).
+
 ## Lokal starten
 
 ```sh
@@ -36,7 +47,7 @@ Python legt die Daten unter `data/health.sqlite3` ab. Docker verwendet das persi
 ## Auf dem eigenen Server / iPhone
 
 1. Projekt auf den Server kopieren, `.env.example` als `.env` ablegen und `APP_ORIGIN` auf die tatsächliche HTTPS-Adresse setzen, z. B. `https://flesh.example.org`.
-2. `docker compose up --build -d` ausführen. Der App-Port bindet ausschließlich an `127.0.0.1:8083`.
+2. `docker compose up --build -d` ausführen. Der App-Port bindet standardmäßig an `127.0.0.1:8083`; `FLESH_BIND` und `FLESH_PORT` sind über `.env` einstellbar.
 3. Einen vorhandenen Reverse Proxy mit TLS auf diesen Port richten. Beispielsweise mit Caddy auf dem Host:
 
    ```caddyfile
@@ -97,4 +108,4 @@ Der Test prüft die zentralen Bedienabläufe und mobile Breite; Screenshots lieg
 
 ## Stand und nächste Schritte
 
-Dies ist ein funktionaler erster Entwicklungsstand, noch keine unabhängig sicherheitsgeprüfte Gesundheitsanwendung. Geplant sind insbesondere Web-Push, verschlüsselter Import, Passwortwechsel/Wiederherstellungsschlüssel, Bearbeiten bestehender Einträge, erweiterte Medikamentenintervalle und ein externer Sicherheitsreview. Registrierung ist derzeit offen, sobald die Instanz erreichbar ist; für einen privaten Betrieb zunächst den Zugriff am Reverse Proxy oder per VPN begrenzen.
+Dies ist ein funktionaler erster Entwicklungsstand, noch keine unabhängig sicherheitsgeprüfte Gesundheitsanwendung. Geplant sind insbesondere Web-Push, verschlüsselter Import, Passwortwechsel/Wiederherstellungsschlüssel, Bearbeiten bestehender Einträge, erweiterte Medikamentenintervalle und ein externer Sicherheitsreview. Der erste Account kann angelegt werden; zusätzliche Registrierungen sind standardmäßig gesperrt und können mit `FLESH_ALLOW_REGISTRATION=true` in `.env` aktiviert werden. Bestehende Accounts bleiben nutzbar.

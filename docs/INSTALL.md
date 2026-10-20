@@ -44,10 +44,37 @@ Nicht beide Clone-Varianten nacheinander ausführen. Ein bereits vorhandenes `~/
 In `.env` die genaue öffentliche URL eintragen:
 
 ```dotenv
+# Keep loopback when using a reverse proxy on the same host.
+FLESH_BIND=127.0.0.1
+FLESH_PORT=8083
+# First account can always be created; additional accounts are disabled by default.
+FLESH_ALLOW_REGISTRATION=false
 APP_ORIGIN=https://flesh.example.org
 ```
 
 Kein abschließender Pfad; ein tatsächlich genutzter abweichender HTTPS-Port gehört zur URL. `.env` ist von Git und dem Docker-Build ausgeschlossen.
+
+## Bind-Adresse, Port und Registrierung
+
+| Einstellung | Standard | Bedeutung |
+| --- | --- | --- |
+| `FLESH_BIND` | `127.0.0.1` | Host-Adresse für die Docker-Portfreigabe. `0.0.0.0` veröffentlicht auf allen IPv4-Schnittstellen. |
+| `FLESH_PORT` | `8083` | App-Port auf dem Host. Der Container und sein Healthcheck verwenden weiterhin Port `8080`. |
+| `FLESH_ALLOW_REGISTRATION` | `false` | Der erste Account kann angelegt werden. Weitere Registrierungen erfordern `true`. Bestehende Accounts können sich weiterhin anmelden. |
+| `APP_ORIGIN` | `http://localhost:<FLESH_PORT>` | Exakte Browser-URL; beim HTTPS-Reverse-Proxy dessen öffentliche URL setzen. |
+
+Für bereits vorhandene Installationen nur fehlende Einstellungen in die lokale `.env` ergänzen; die vorhandene Datei nicht durch `.env.example` ersetzen. Ohne neue Einträge bleiben Bind-Adresse und Port unverändert, zusätzliche Registrierungen sind jetzt standardmäßig gesperrt. Es werden keine Accounts oder Daten gelöscht. Das Anlegen des ersten Accounts ist nicht an eine bestimmte Person gebunden: Die erste erfolgreiche Registrierung erhält den ersten Account.
+
+Nach Anpassungen `~/flesh/update.sh` ausführen. Ohne erneuten Build lässt sich eine reine Konfigurationsänderung auch so anwenden, sofern das aktuelle Image bereits installiert ist:
+
+```sh
+cd ~/flesh
+docker compose up -d --force-recreate health
+```
+
+Ein bloßes `docker compose restart` übernimmt keine geänderten Umgebungsvariablen oder Portfreigaben. Bei anderem `FLESH_PORT` auch das Reverse-Proxy-Upstream-Ziel und lokale Healthcheck-Befehle anpassen. `APP_ORIGIN` ändert sich nur, wenn sich die tatsächliche Browser-URL ändert. Eine Portfreigabe auf `0.0.0.0` macht HTTP nicht zu HTTPS; die Browser-Verschlüsselung auf dem Handy benötigt weiterhin einen sicheren Kontext.
+
+Beim direkten Betrieb ohne Docker liest Python `.env` nicht automatisch. Einstellungen als Prozessumgebung übergeben, z. B. `FLESH_BIND=127.0.0.1 FLESH_PORT=8083 python3 server.py`. Die internen Variablen `BIND` und `PORT` haben Vorrang; Docker setzt diese ausdrücklich auf `0.0.0.0` und `8080`.
 
 ## Installieren
 
@@ -58,7 +85,7 @@ chmod 700 ~/flesh/update.sh
 
 Das Skript lädt `origin/server`, baut das Image und startet Compose. Beim ersten Start wird das Datenvolume automatisch angelegt; ohne vorhandene Datenbank wird noch kein Backup erstellt. Der Dienst läuft als Benutzer mit UID 10001 im Container, unabhängig vom Benutzer, der das Update startet.
 
-Der HTTP-Upstream ist ausschließlich lokal erreichbar:
+Mit den Standardeinstellungen ist der HTTP-Upstream ausschließlich lokal erreichbar:
 
 ```text
 127.0.0.1:8083 → Container:8080
@@ -89,7 +116,7 @@ flesh.example.org {
 
 DNS und Firewall müssen den HTTPS-Zugriff ermöglichen; Caddy benötigt für die übliche automatische Zertifikatsausstellung erreichbare Ports 80/443. Vorhandene Caddy-Konfiguration ergänzen, nicht ersetzen. Anschließend die Konfiguration prüfen und den Dienst gemäß seiner Installation neu laden.
 
-**Port 8083 ist der lokale App-Port.** Auf dem Handy wird normalerweise `https://flesh.example.org` über HTTPS-Port 443 geöffnet. `http://HOST-IP:8083` ist weder öffentlich freigegeben noch als mobile PWA geeignet: Web Crypto und Service Worker benötigen einen sicheren Browserkontext. Ein VPN allein macht eine HTTP-IP-Adresse nicht zu HTTPS.
+**Port 8083 ist standardmäßig der lokale App-Port.** Auf dem Handy wird normalerweise `https://flesh.example.org` über HTTPS-Port 443 geöffnet. `http://HOST-IP:8083` ist weder öffentlich freigegeben noch als mobile PWA geeignet: Web Crypto und Service Worker benötigen einen sicheren Browserkontext. Ein VPN allein macht eine HTTP-IP-Adresse nicht zu HTTPS.
 
 Läuft der Reverse Proxy in Docker, benötigt er ein gemeinsames Netzwerk mit dem Dienst. Das Upstream-Ziel ist dann `health:8080`; `127.0.0.1` innerhalb des Proxy-Containers ist nicht der Docker-Host. Alternativ kann ein vorhandener Proxy über seine eingerichtete Host-Anbindung den lokalen Upstream erreichen.
 

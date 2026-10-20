@@ -16,5 +16,6 @@ Alle ursprünglichen Anforderungen werden einzeln in GitHub Issues verfolgt. Imp
 | #10 | Neutrale Dokumentation und Feature-Issue-Workflow | Implementiert |
 | #11 | Muskelfaser-Logo, PWA-Icons und Bordeaux-Farbschema | Implementiert |
 | #12 | Updates im Home-Verzeichnis ohne Root-Pflicht | Implementiert |
+| #13 | Bind-Adresse, Port und Registrierung per .env konfigurieren | Implementiert |
 
 Die Detailkriterien und Prüfungen stehen in den jeweiligen Issues und in `.github/features.json`. Neue Feature-Anfragen erhalten ebenfalls ein eigenes Issue.

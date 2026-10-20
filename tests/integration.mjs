@@ -14,7 +14,7 @@ async function request(path,body,session=cookie,requestOrigin=origin){
  return {status:res.status,body:await res.json(),cookie:res.headers.get('set-cookie')?.split(';')[0]};
 }
 before(async()=>{
- server=spawn('python3',['server.py'],{cwd:fileURLToPath(new URL('../',import.meta.url)),env:{...process.env,PORT:'18081',APP_ORIGIN:origin,DATABASE_PATH:join(dir,'db.sqlite')}});
+ server=spawn('python3',['server.py'],{cwd:fileURLToPath(new URL('../',import.meta.url)),env:{...process.env,PORT:'18081',FLESH_ALLOW_REGISTRATION:'true',APP_ORIGIN:origin,DATABASE_PATH:join(dir,'db.sqlite')}});
  for(let i=0;i<100;i++){try{if((await fetch(origin+'/api/health')).ok)return;}catch{}await new Promise(r=>setTimeout(r,30));}
  throw new Error('Server did not start');
 });
@@ -76,4 +76,41 @@ test('PWA and Apple touch icons are publicly served with their declared PNG dime
  }
  const html=await (await fetch(origin+'/')).text();
  assert.match(html,/rel="apple-touch-icon"/);
+});
+test('default registration policy allows only one concurrent first account and preserves login across restart',async()=>{
+ const policyOrigin='http://127.0.0.1:18086';
+ const database=join(dir,'registration.sqlite');
+ let process;
+ async function start(allow){
+  const env={...globalThis.process.env,FLESH_PORT:'18086',FLESH_BIND:'127.0.0.1',DATABASE_PATH:database};
+  delete env.PORT;delete env.BIND;delete env.APP_ORIGIN;delete env.FLESH_ALLOW_REGISTRATION;
+  if(allow!==undefined)env.FLESH_ALLOW_REGISTRATION=allow;
+  process=spawn('python3',['server.py'],{cwd:fileURLToPath(new URL('../',import.meta.url)),env});
+  for(let i=0;i<100;i++){try{if((await fetch(policyOrigin+'/api/health')).ok)return;}catch{}await new Promise(r=>setTimeout(r,30));}
+  throw new Error('Registration-policy server did not start');
+ }
+ async function stop(){
+  if(process&&process.exitCode===null){const exited=new Promise(resolve=>process.once('exit',resolve));process.kill();await exited;}
+ }
+ async function post(path,body){
+  const res=await fetch(policyOrigin+'/api/'+path,{method:'POST',headers:{Origin:'http://localhost:18086','Content-Type':'application/json'},body:JSON.stringify(body)});
+  return {status:res.status,body:await res.json()};
+ }
+ const auth=Buffer.alloc(32,7).toString('base64');
+ const envelope=await encrypt(await vaultKey('synthetic registration password',randomSalt()),{empty:true});
+ const registration=username=>({username,auth,keySalt:randomSalt(),vault:envelope});
+ try{
+  await start(); // Unset registration flag must default to false.
+  const contenders=['first-user','second-user'];
+  const responses=await Promise.all(contenders.map(name=>post('register',registration(name))));
+  assert.deepEqual(responses.map(r=>r.status).sort(),[200,403]);
+  const winner=contenders[responses.findIndex(r=>r.status===200)];
+  assert.equal((await post('login',{username:winner,auth})).status,200);
+  await stop();await start('false');
+  assert.equal((await post('register',registration('third-user'))).status,403);
+  assert.equal((await post('login',{username:winner,auth})).status,200);
+  await stop();await start('true');
+  assert.equal((await post('register',registration('third-user'))).status,200);
+  assert.equal((await post('register',registration('fourth-user'))).status,200);
+ }finally{await stop();}
 });

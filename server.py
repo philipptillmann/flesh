@@ -16,7 +16,10 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).parent
 DB_PATH = os.environ.get('DATABASE_PATH', str(ROOT / 'data' / 'health.sqlite3'))
-ORIGIN = os.environ.get('APP_ORIGIN', 'http://localhost:8083').rstrip('/')
+PORT = int(os.environ.get('PORT', os.environ.get('FLESH_PORT', '8083')))
+BIND = os.environ.get('BIND', os.environ.get('FLESH_BIND', '127.0.0.1'))
+ORIGIN = os.environ.get('APP_ORIGIN', f'http://localhost:{PORT}').rstrip('/')
+ALLOW_REGISTRATION = os.environ.get('FLESH_ALLOW_REGISTRATION', 'false').strip().lower() == 'true'
 SECURE = ORIGIN.startswith('https://')
 LIMIT = 2_000_000
 LOCK = threading.Lock()
@@ -145,6 +148,11 @@ class Handler(SimpleHTTPRequestHandler):
                     if count >= 10 or len(ATTEMPTS) > 10000:
                         return self.reply(429, {'error': 'Zu viele Versuche. Bitte in 15 Minuten erneut versuchen.'})
                     ATTEMPTS[username] = (count + 1, start)
+                if path == '/api/register':
+                    # Serialize the empty-database check and insert across requests/processes.
+                    db.execute('BEGIN IMMEDIATE')
+                    if not ALLOW_REGISTRATION and db.execute('SELECT 1 FROM users LIMIT 1').fetchone():
+                        return self.reply(403, {'error': 'Weitere Registrierungen sind deaktiviert.'})
                 user = db.execute('SELECT * FROM users WHERE username=?', (username,)).fetchone()
                 if path == '/api/register':
                     if not valid_envelope(body.get('vault')):
@@ -194,4 +202,4 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == '__main__':
     init_db()
-    ThreadingHTTPServer(('0.0.0.0', int(os.environ.get('PORT', '8083'))), Handler).serve_forever()
+    ThreadingHTTPServer((BIND, PORT), Handler).serve_forever()

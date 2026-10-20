@@ -154,5 +154,20 @@
     ],
     "verification": "Betriebstests für fremdes Arbeitsverzeichnis, fehlenden Docker-Zugriff, Compose, Backups und Rollback.",
     "implemented": true
+  },
+  {
+    "id": "env-deployment-settings",
+    "title": "Configure bind address, port and registration through .env",
+    "description": "Configure the host binding, published port and additional-account registration without editing Compose.",
+    "criteria": [
+      "Support FLESH_BIND and FLESH_PORT with unchanged network defaults",
+      "Keep internal container port and healthcheck stable",
+      "Default additional registration to disabled and serialize first-account creation",
+      "Preserve existing logins and data",
+      "Test Compose interpolation, native configuration and registration policy",
+      "Document preserving local .env and applying configuration changes"
+    ],
+    "verification": "Compose config tests for defaults, custom bind/port, origin and registration; integration test for concurrent bootstrap registration and policy changes across restarts.",
+    "implemented": true
   }
 ]
