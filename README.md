@@ -7,12 +7,15 @@ Die visuelle Identität verwendet ein organisches Muskelfaser-Logo in Bordeaux, 
 ## Enthalten
 
 - Mehrere Benutzerkonten mit separaten verschlüsselten Datentresoren.
-- Leiden anlegen; Schmerzen einem Leiden zuordnen, Datum, Körperstelle, Stärke 0–10, Notizen und Verlauf.
+- Allgemeine körperliche Beobachtungen erfassen: Bezeichnung, Datum, optionale Themen, neutrale/positive/unangenehme Einordnung, Messwert, Einheit und Notizen.
+- Gemeinsamer Bereich „Beobachtungen“ für allgemeine Einträge, Schmerzen und Menstruation mit Filter nach Art. Schmerzen können optional einem Thema zugeordnet werden.
 - Tägliche Medikamentenpläne mit Dosierung, mehreren Uhrzeiten, Start-/Enddatum und Einnahmeprotokoll. Gelöschte Pläne behalten ihren Medikamentennamen im Einnahmeprotokoll.
-- Zyklustagebuch mit Blutungsstärke, Periodenbeginn, Beschwerden und Beschwerdestärke; aktueller Zyklustag und bisherige Zykluslängen aus erfassten Periodenbeginnen. Keine Fruchtbarkeitsprognosen.
+- Menstruationseinträge im gemeinsamen Beobachtungsverlauf mit Blutungsstärke, Periodenbeginn, Beschwerden und Beschwerdestärke; aktueller Zyklustag und bisherige Zykluslängen aus erfassten Periodenbeginnen. Keine Fruchtbarkeitsprognosen.
 - Automatische Sperre nach fünf Minuten ohne Aktivität bzw. einer Minute im Hintergrund.
 - Verschlüsselter Backup-Download. Änderungen werden erst nach erfolgreicher Serverspeicherung übernommen. Konflikte zwischen Geräten werden abgewiesen; in diesem Fall den nicht gespeicherten Eintrag kopieren, sperren und erneut anmelden.
 - Installierbare PWA mit gecachter öffentlicher App-Hülle. Gesundheitsdaten werden nicht im Browser gespeichert. Zum Entsperren und Speichern ist eine Serververbindung erforderlich.
+
+Bestehende Leiden und Schmerz-/Menstruationseinträge bleiben erhalten; Details zum Datenformat und zur gemeinsamen Ansicht: [Beobachtungen](docs/OBSERVATIONS.md).
 
 ## Installation und Updates
 
@@ -64,7 +67,7 @@ Python legt die Daten unter `data/health.sqlite3` ab. Docker verwendet das persi
 ## Verschlüsselung und Vertrauensgrenzen
 
 - Der Browser erzeugt pro Account 32 zufällige Salt-Bytes und leitet den nicht exportierbaren AES-256-GCM-Schlüssel mit PBKDF2-HMAC-SHA-256 / 600.000 Iterationen aus dem Passwort ab.
-- Jede Speicherung verwendet einen neuen zufälligen 96-Bit-IV und authentifizierte Formatkennung. Alle Leiden, Medikamente, Uhrzeiten, Einnahmen, Zyklusdaten und Notizen liegen gemeinsam im verschlüsselten Tresor.
+- Jede Speicherung verwendet einen neuen zufälligen 96-Bit-IV und authentifizierte Formatkennung. Alle Themen, Beobachtungen, Medikamente, Uhrzeiten, Einnahmen, Zyklusdaten und Notizen liegen gemeinsam im verschlüsselten Tresor.
 - Der Server erhält weder Passwort noch Datenschlüssel. Zur Anmeldung sendet der Browser ein getrennt abgeleitetes Authentifizierungsgeheimnis mit eigenem Salt-Kontext. Dieses wird serverseitig nochmals mit zufälligem Salt und scrypt gehasht. Das gesendete Authentifizierungsgeheimnis ist selbst ein Zugangsnachweis und muss durch TLS geschützt werden.
 - Technische Metadaten bleiben lesbar: Benutzername, Kontokennung, Salts, Passwortprüfwert, Tresorgröße/-revision und gehashte Sitzungstokens mit Ablaufzeit. Reverse-Proxy-Logs können zusätzlich IP und Zugriffszeiten enthalten.
 - Sitzungen: zufälliges 256-Bit-Token, nur gehasht gespeichert, zwölf Stunden Laufzeit; HttpOnly-/SameSite-Strict-Cookies, Prüfung des exakten Origin bei Schreibzugriffen. Begrenzung fehlgeschlagener Anmeldungen pro Benutzername im Arbeitsspeicher.
@@ -90,7 +93,7 @@ Der Download in der App enthält das Schlüsselsalz und den verschlüsselten Tre
 Python 3.12+ und Node.js 22+:
 
 ```sh
-node --test tests/integration.mjs
+node --test tests/*.mjs
 python3 -m py_compile server.py
 node --check public/app.js
 node --check public/crypto.js
@@ -104,7 +107,7 @@ Optionaler Browsertest (installiertes Python-Playwright und Chromium unter `/usr
 python3 tests/browser.py
 ```
 
-Der Test prüft die zentralen Bedienabläufe und mobile Breite; Screenshots liegen unter `/tmp/health-desktop.png` und `/tmp/health-mobile.png`. Ein echter Safari-/iPhone-Test steht noch aus.
+Der Test prüft ein altes verschlüsseltes Journal, allgemeine und positive Beobachtungen, den gemeinsamen Verlauf, Filter, Speicherung und mobile Breite; Screenshots liegen unter `/tmp/health-desktop.png` und `/tmp/health-mobile.png`. Ein echter Safari-/iPhone-Test steht noch aus.
 
 ## Stand und nächste Schritte
 

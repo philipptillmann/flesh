@@ -22,7 +22,7 @@ Die GitHub-Repository-Zuordnung und GitHub-Aktivitäten selbst bleiben auf der P
 ## Prüfungen
 
 ```sh
-node --test tests/integration.mjs
+node --test tests/*.mjs
 python3 -m unittest discover -s tests -p 'test_*.py'
 bash -n update.sh
 python3 -m py_compile server.py ops.py

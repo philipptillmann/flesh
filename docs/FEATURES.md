@@ -17,5 +17,8 @@ Alle ursprünglichen Anforderungen werden einzeln in GitHub Issues verfolgt. Imp
 | #11 | Muskelfaser-Logo, PWA-Icons und Bordeaux-Farbschema | Implementiert |
 | #12 | Updates im Home-Verzeichnis ohne Root-Pflicht | Implementiert |
 | #13 | Bind-Adresse, Port und Registrierung per .env konfigurieren | Implementiert |
+| #14 | Sachliche Kurztexte ohne Sprüche | Implementiert |
+| #15 | Menstruation und andere Beobachtungen konsolidieren | Implementiert |
+| #16 | Allgemeine körperliche Beobachtungen statt Leiden als Voraussetzung | Implementiert |
 
 Die Detailkriterien und Prüfungen stehen in den jeweiligen Issues und in `.github/features.json`. Neue Feature-Anfragen erhalten ebenfalls ein eigenes Issue.

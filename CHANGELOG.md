@@ -4,6 +4,10 @@
 
 ### Implementiert
 
+- #14: Sprüche entfernt; kurze sachliche Texte für Anmeldung, Navigation, Formulare und Datenschutz.
+- #15: Menstruation, Schmerzen und allgemeine Beobachtungen in einem Bereich mit gemeinsamem Verlauf und Art-Filter zusammengeführt.
+- #16: Allgemeine körperliche Beobachtungen ohne Leiden erfassbar; optionale Themen, Einordnung und Messwerte. Bestehende verschlüsselte Einträge bleiben erhalten.
+
 - #13: `.env`-Einstellungen für Bind-Adresse und Port sowie gesperrte Zusatzregistrierungen mit einmaliger Erstkontoanlage; bestehende Accounts und Daten bleiben erhalten.
 
 - #11: Muskelfaser-Logo in App, Browser und PWA; Apple-Touch-Icon und maskierbares Home-Screen-Icon sowie Bordeaux-, Korall- und Cremefarben für Buttons, Navigation und Formulare.

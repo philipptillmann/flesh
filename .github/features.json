@@ -169,5 +169,41 @@
     ],
     "verification": "Compose config tests for defaults, custom bind/port, origin and registration; integration test for concurrent bootstrap registration and policy changes across restarts.",
     "implemented": true
+  },
+  {
+    "id": "factual-copy",
+    "title": "Alle Sprüche entfernen. Beschreibungen faktisch, kurz und knapp, kein Prosa",
+    "description": "Alle Sprüche entfernen. Beschreibungen faktisch, kurz und knapp, kein Prosa",
+    "criteria": [
+      "Sprüche und dekorative Textabschnitte entfernen",
+      "Anmeldung, Navigation, Formulare und Datenschutz sachlich formulieren"
+    ],
+    "verification": "Chromium-Bedientest mit altem verschlüsseltem Journal, neuen Beobachtungen, Filtern, Mobilansicht und erneuter Anmeldung; Domänentests für unveränderte Bestandsfelder.",
+    "implemented": true
+  },
+  {
+    "id": "unified-observations",
+    "title": "Reiter \"Menstruation\" und andere \"Beobachtungen\" konsolidieren.",
+    "description": "Reiter \"Menstruation\" und andere \"Beobachtungen\" konsolidieren.",
+    "criteria": [
+      "Gemeinsamer Bereich für allgemeine Beobachtungen, Schmerzen und Menstruation",
+      "Gemeinsamen Verlauf und Filter nach Art anbieten",
+      "Menstruationsfelder und Zyklusdaten beibehalten"
+    ],
+    "verification": "Chromium-Bedientest mit altem verschlüsseltem Journal, neuen Beobachtungen, Filtern, Mobilansicht und erneuter Anmeldung; Domänentests für unveränderte Bestandsfelder.",
+    "implemented": true
+  },
+  {
+    "id": "general-observations",
+    "title": "Von Leiden auf Beobachtungen umschwenken",
+    "description": "Von Leiden auf Beobachtungen umschwenken",
+    "criteria": [
+      "Allgemeine und positive körperliche Beobachtungen ohne Leiden erfassen",
+      "Themen statt Leiden als optionale Zuordnung anzeigen",
+      "Messwert, Einheit, Einordnung und Notizen ermöglichen",
+      "Bestandsdaten beim Laden und Speichern beibehalten"
+    ],
+    "verification": "Chromium-Bedientest mit altem verschlüsseltem Journal, neuen Beobachtungen, Filtern, Mobilansicht und erneuter Anmeldung; Domänentests für unveränderte Bestandsfelder.",
+    "implemented": true
   }
 ]

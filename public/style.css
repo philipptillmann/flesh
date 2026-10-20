@@ -3,3 +3,5 @@
 @media(max-width:650px){#status:not(:empty){bottom:calc(88px + env(safe-area-inset-bottom))}}
 
 .primary:hover:not(:disabled){background:#7c2d42}.secondary:hover:not(:disabled){background:#f2dce0}.link:hover{color:var(--brand)}nav button:hover:not(.active){background:#fbede9}
+
+.entry .tag{display:block;margin-bottom:6px}.cycle-summary{margin-top:28px;border-top:1px solid var(--line);padding-top:22px}.section-head>label{max-width:180px}.entry strong{overflow-wrap:anywhere}.auth h1{font-size:clamp(34px,5vw,58px);overflow-wrap:anywhere}.soft h2{font-family:inherit;font-size:19px}.section-head{flex-wrap:wrap}
